@@ -13,10 +13,10 @@ const ExampleSlider = () => {
 
   return (
     <div className="p-4">
-      <h2 className="text-2xl font-bold mb-4">Our Products</h2>
+      <h2 className="text-2xl font-bold mb-4">Summer 2025</h2>
       <Slider {...settings}>
         <div>
-          <h3>Product 1</h3>
+          <h3>New Collection</h3>
         </div>
         <div>
           <h3>Product 2</h3>
