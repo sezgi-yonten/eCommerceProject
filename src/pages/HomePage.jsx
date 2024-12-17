@@ -1,54 +1,60 @@
 import React from 'react';
-import PageContent from '../layout/PageContent';
+import { useSelector, useDispatch } from 'react-redux';
+import { useEffect } from 'react';
+import { fetchProducts } from '../store/thunks/productThunks.js';
 import ExampleSlider from '../components/ExampleSlider';
+import ProductCard from '../components/ProductCard';
 
 const HomePage = () => {
+  const dispatch = useDispatch();
+  const { products, loading, error } = useSelector(state => state.products);
+
+  useEffect(() => {
+    dispatch(fetchProducts());
+  }, [dispatch]);
+
+  // Make sure products is an array before slicing
+  const featuredProducts = Array.isArray(products) ? products.slice(0, 8) : [];
+
   return (
     <div className="bg-white">
-      {/* Hero Section */}
-      <section className="relative">
-        {/* Content Overlay */}
-        <div className="absolute inset-0 z-10 flex items-center">
-          <div className="container mx-auto px-4">
-            <div className="max-w-xl space-y-6">
-              <h2 className="text-[#23856D] text-base font-bold">
-                SUMMER 2024
-              </h2>
-              <h1 className="text-4xl md:text-5xl font-bold text-gray-800">
-                NEW COLLECTION
-              </h1>
-              <p className="text-gray-600 text-xl">
-                We know how large objects will act, but things on a small scale just do not act that way.
-              </p>
-              <div>
-                <a 
-                  href="/shop"
-                  className="inline-block bg-[#23856D] text-white px-10 py-4 font-bold hover:bg-[#1a6351] transition-colors"
-                >
-                  SHOP NOW
-                </a>
-              </div>
-            </div>
+      {/* Hero Section with Slider */}
+      <ExampleSlider />
+
+      {/* Featured Products Section */}
+      <section className="py-16">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-12">
+            <h5 className="text-gray-600 text-base mb-2">Featured Products</h5>
+            <h2 className="text-gray-900 text-4xl font-bold mb-4">BESTSELLER PRODUCTS</h2>
+            <p className="text-gray-600">Problems trying to resolve the conflict between</p>
           </div>
-        </div>
 
-        {/* Slider */}
-        <ExampleSlider />
+          {loading ? (
+            <div className="flex justify-center">
+              <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+            </div>
+          ) : error ? (
+            <div className="text-red-500 text-center">{error}</div>
+          ) : featuredProducts.length > 0 ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+              {featuredProducts.map((product) => (
+                <ProductCard
+                  key={product.id}
+                  id={product.id}
+                  title={product.title}
+                  category={product.category}
+                  price={`$${product.price}`}
+                  discountedPrice={`$${(product.price * 0.8).toFixed(2)}`}
+                  image={product.image}
+                />
+              ))}
+            </div>
+          ) : (
+            <div className="text-center text-gray-500">No products available</div>
+          )}
+        </div>
       </section>
-      
-      <PageContent>
-        <div className="space-y-12">
-          <section>
-            <h1 className="text-4xl font-bold mb-4 text-gray-900">Welcome to Our Store</h1>
-            <p className="text-gray-700 mb-8">Discover our amazing collection of products.</p>
-          </section>
-
-          <section>
-            <h2 className="text-2xl font-bold mb-6 text-gray-900">Featured Products</h2>
-            <ExampleSlider />
-          </section>
-        </div>
-      </PageContent>
     </div>
   );
 };

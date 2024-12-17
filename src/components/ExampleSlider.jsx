@@ -6,16 +6,28 @@ const ExampleSlider = () => {
 
   const slides = [
     {
-      image: "https://via.placeholder.com/1920x800",
-      alt: "Summer Collection 2024"
+      image: "https://via.placeholder.com/1920x800/23856D/ffffff",
+      title: "SUMMER 2024",
+      heading: "NEW COLLECTION",
+      description: "We know how large objects will act, but things on a small scale just do not act that way.",
+      buttonText: "SHOP NOW",
+      buttonLink: "/shop"
     },
     {
-      image: "https://via.placeholder.com/1920x800",
-      alt: "Autumn Collection 2024"
+      image: "https://via.placeholder.com/1920x800/1B6350/ffffff",
+      title: "AUTUMN 2024",
+      heading: "EXCLUSIVE COLLECTION",
+      description: "Discover our latest collection designed for the modern lifestyle.",
+      buttonText: "LEARN MORE",
+      buttonLink: "/collection"
     },
     {
-      image: "https://via.placeholder.com/1920x800",
-      alt: "Winter Collection 2024"
+      image: "https://via.placeholder.com/1920x800/154D3E/ffffff",
+      title: "WINTER 2024",
+      heading: "SPECIAL EDITION",
+      description: "Limited edition pieces that combine style with exceptional quality.",
+      buttonText: "VIEW MORE",
+      buttonLink: "/special"
     }
   ];
 
@@ -31,66 +43,77 @@ const ExampleSlider = () => {
     );
   };
 
+  const goToSlide = (index) => {
+    setCurrentIndex(index);
+  };
+
   return (
-    <div className="relative">
-      <div className="overflow-hidden">
-        {/* Slides Container */}
-        <div 
-          className="flex transition-transform duration-500 ease-out w-full"
-          style={{ 
-            transform: `translateX(-${currentIndex * 100}%)`,
-            width: `${slides.length * 100}%`
-          }}
-        >
-          {slides.map((slide, index) => (
-            <div 
-              key={index}
-              className="w-full h-[600px]"
-              style={{ width: `${100 / slides.length}%` }}
-            >
-              <img 
-                src={slide.image}
-                alt={slide.alt}
-                className="w-full h-full object-cover"
-              />
-            </div>
-          ))}
-        </div>
-
-        {/* Navigation Arrows */}
-        <div className="absolute inset-0 flex items-center justify-between px-4 md:px-10">
-          <button 
-            onClick={prevSlide}
-            className="group bg-white/80 hover:bg-white w-12 h-12 md:w-16 md:h-16 rounded-full flex items-center justify-center shadow-lg transition-all duration-300 hover:scale-110"
-            aria-label="Previous slide"
-          >
-            <ChevronLeft size={32} className="text-gray-800 group-hover:text-[#23856D] transition-colors" />
-          </button>
-
-          <button 
-            onClick={nextSlide}
-            className="group bg-white/80 hover:bg-white w-12 h-12 md:w-16 md:h-16 rounded-full flex items-center justify-center shadow-lg transition-all duration-300 hover:scale-110"
-            aria-label="Next slide"
-          >
-            <ChevronRight size={32} className="text-gray-800 group-hover:text-[#23856D] transition-colors" />
-          </button>
-        </div>
-
-        {/* Dots Navigation */}
-        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex space-x-3 z-20">
-          {slides.map((_, index) => (
-            <button
-              key={index}
-              onClick={() => setCurrentIndex(index)}
-              className={`w-3 h-3 rounded-full transition-all duration-300 
-                ${index === currentIndex 
-                  ? 'bg-[#23856D] w-6' 
-                  : 'bg-white/80 hover:bg-white'
-                }`}
-              aria-label={`Go to slide ${index + 1}`}
+    <div className="relative h-[600px] overflow-hidden">
+      {/* Slides */}
+      <div 
+        className="h-full transition-transform duration-500 ease-out"
+        style={{ transform: `translateX(-${currentIndex * 100}%)`, width: `${slides.length * 100}%`, display: 'flex' }}
+      >
+        {slides.map((slide, index) => (
+          <div key={index} className="relative w-full h-full flex-shrink-0">
+            <img
+              src={slide.image}
+              alt={slide.heading}
+              className="w-full h-full object-cover"
             />
-          ))}
-        </div>
+            <div className="absolute inset-0 bg-black/30" />
+            <div className="absolute inset-0 flex items-center">
+              <div className="container mx-auto px-4">
+                <div className="max-w-xl space-y-6">
+                  <h2 className="text-[#23856D] text-base font-bold bg-white inline-block px-4 py-2">
+                    {slide.title}
+                  </h2>
+                  <h1 className="text-4xl md:text-5xl font-bold text-white">
+                    {slide.heading}
+                  </h1>
+                  <p className="text-white text-xl">
+                    {slide.description}
+                  </p>
+                  <div>
+                    <a 
+                      href={slide.buttonLink}
+                      className="inline-block bg-[#23856D] text-white px-10 py-4 font-bold hover:bg-[#1a6351] transition-colors"
+                    >
+                      {slide.buttonText}
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Navigation Buttons */}
+      <button
+        onClick={prevSlide}
+        className="absolute left-4 top-1/2 -translate-y-1/2 p-2 bg-white/80 rounded-full hover:bg-white transition-colors"
+      >
+        <ChevronLeft className="w-6 h-6 text-gray-800" />
+      </button>
+      <button
+        onClick={nextSlide}
+        className="absolute right-4 top-1/2 -translate-y-1/2 p-2 bg-white/80 rounded-full hover:bg-white transition-colors"
+      >
+        <ChevronRight className="w-6 h-6 text-gray-800" />
+      </button>
+
+      {/* Dots */}
+      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex space-x-2">
+        {slides.map((_, index) => (
+          <button
+            key={index}
+            onClick={() => goToSlide(index)}
+            className={`w-3 h-3 rounded-full transition-colors ${
+              index === currentIndex ? 'bg-white' : 'bg-white/50'
+            }`}
+          />
+        ))}
       </div>
     </div>
   );
