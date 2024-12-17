@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import api from '../api/axios';
 import { Loader2 } from 'lucide-react';
 import { toast } from 'react-toastify';
 
 const SignupPage = () => {
-  const navigate = useNavigate();
+  const history = useHistory();
   const location = useLocation();
   const [roles, setRoles] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -54,7 +54,7 @@ const SignupPage = () => {
       await api.post('/signup', formData);
       toast.success('Please check your email to activate your account!');
       reset();
-      navigate(location.state?.from || '/');
+      history.push(location.state?.from?.pathname || '/');
     } catch (error) {
       toast.error(error.message || 'Failed to create account');
     } finally {
