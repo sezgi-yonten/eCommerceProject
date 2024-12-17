@@ -1,36 +1,34 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const ProductCard = ({ product }) => {
+const ProductCard = ({ title, category, price, discountedPrice, image }) => {
   return (
-    <div className="border rounded-lg p-4 shadow-md hover:shadow-lg transition-shadow duration-300">
-      <div className="relative pb-[100%]">
+    <div className="bg-white rounded-lg shadow-md overflow-hidden">
+      <div className="relative">
         <img 
-          src={product.image} 
-          alt={product.title || product.name} 
-          className="absolute top-0 left-0 w-full h-full object-contain rounded-md"
+          src={image} 
+          alt={title}
+          className="w-full h-[300px] object-cover"
         />
       </div>
-      <h2 className="text-lg font-semibold mt-4 line-clamp-2">{product.title || product.name}</h2>
-      <p className="text-gray-700 mt-2 font-bold">${product.price}</p>
-      <button 
-        className="w-full bg-blue-500 text-white px-4 py-2 rounded-md mt-4 hover:bg-blue-600 transition-colors duration-300"
-        onClick={() => alert('Added to cart!')}
-      >
-        Add to Cart
-      </button>
+      <div className="p-4">
+        <div className="text-sm text-gray-500 mb-2">{category}</div>
+        <h3 className="text-lg font-semibold mb-2">{title}</h3>
+        <div className="flex items-center space-x-2">
+          <span className="text-gray-500 line-through">{price}</span>
+          <span className="text-blue-600 font-semibold">{discountedPrice}</span>
+        </div>
+      </div>
     </div>
   );
 };
 
 ProductCard.propTypes = {
-  product: PropTypes.shape({
-    id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
-    title: PropTypes.string,
-    name: PropTypes.string,
-    price: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
-    image: PropTypes.string.isRequired,
-  }).isRequired,
+  title: PropTypes.string.isRequired,
+  category: PropTypes.string.isRequired,
+  price: PropTypes.string.isRequired,
+  discountedPrice: PropTypes.string.isRequired,
+  image: PropTypes.string.isRequired,
 };
 
 export default ProductCard;
