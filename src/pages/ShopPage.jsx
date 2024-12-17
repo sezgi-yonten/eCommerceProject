@@ -99,7 +99,7 @@ const ShopPage = () => {
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center min-h-screen">
+      <div className="flex justify-center items-center min-h-[calc(100vh-200px)]">
         <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-[#23856D]"></div>
       </div>
     );
@@ -107,7 +107,7 @@ const ShopPage = () => {
 
   if (error) {
     return (
-      <div className="flex justify-center items-center min-h-screen">
+      <div className="flex justify-center items-center min-h-[calc(100vh-200px)]">
         <div className="text-red-500">Error: {error}</div>
       </div>
     );

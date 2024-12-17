@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { useHistory, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import api from '../api/axios';
 import { Loader2 } from 'lucide-react';
 import { toast } from 'react-toastify';
 
 const SignupPage = () => {
-  const history = useHistory();
+  const navigate = useNavigate();
   const location = useLocation();
   const [roles, setRoles] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -55,7 +55,7 @@ const SignupPage = () => {
       await api.post('/signup', formData);
       toast.success('Lütfen hesabınızı aktifleştirmek için e-postanızı kontrol edin!');
       reset();
-      history.push(location.state?.from?.pathname || '/');
+      navigate(location.state?.from?.pathname || '/');
     } catch (error) {
       toast.error(error.message || 'Kayıt işlemi başarısız oldu');
     } finally {
