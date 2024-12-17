@@ -10,9 +10,10 @@ const SignupPage = () => {
   const location = useLocation();
   const [roles, setRoles] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  
   const { register, handleSubmit, watch, formState: { errors }, reset } = useForm({
     defaultValues: {
-      role_id: '2', // Default to Customer role
+      role_id: '1', // Default to Customer role
     }
   });
 
@@ -25,7 +26,7 @@ const SignupPage = () => {
         const response = await api.get('/roles');
         setRoles(response.data);
       } catch (error) {
-        toast.error('Failed to fetch roles');
+        toast.error('Rolleri getirme başarısız oldu');
       }
     };
     fetchRoles();
@@ -41,8 +42,8 @@ const SignupPage = () => {
         role_id: data.role_id
       };
 
-      // Add store data if role is store (assuming store role_id is '3')
-      if (data.role_id === '3') {
+      // Add store data only if store role is selected
+      if (data.role_id === '2') {
         formData.store = {
           name: data.store_name,
           phone: data.store_phone,
@@ -52,21 +53,55 @@ const SignupPage = () => {
       }
 
       await api.post('/signup', formData);
-      toast.success('Please check your email to activate your account!');
+      toast.success('Lütfen hesabınızı aktifleştirmek için e-postanızı kontrol edin!');
       reset();
       history.push(location.state?.from?.pathname || '/');
     } catch (error) {
-      toast.error(error.message || 'Failed to create account');
+      toast.error(error.message || 'Kayıt işlemi başarısız oldu');
     } finally {
       setIsLoading(false);
     }
   };
 
+  // Register store fields only when store role is selected
+  useEffect(() => {
+    if (selectedRole === '2') {
+      register('store_name', {
+        required: 'Mağaza adı gereklidir',
+        minLength: {
+          value: 3,
+          message: 'Mağaza adı en az 3 karakter olmalıdır'
+        }
+      });
+      register('store_phone', {
+        required: 'Mağaza telefonu gereklidir',
+        pattern: {
+          value: /^(\+90|0)?[0-9]{10}$/,
+          message: 'Geçerli bir Türkiye telefon numarası giriniz'
+        }
+      });
+      register('tax_no', {
+        required: 'Vergi numarası gereklidir',
+        pattern: {
+          value: /^T\d{3}V\d{6}$/,
+          message: 'Vergi numarası TXXXVXXXXXX formatında olmalıdır'
+        }
+      });
+      register('bank_account', {
+        required: 'IBAN gereklidir',
+        pattern: {
+          value: /^TR\d{2}\d{5}[A-Z0-9]{17}$/,
+          message: 'Geçerli bir Türkiye IBAN numarası giriniz'
+        }
+      });
+    }
+  }, [selectedRole, register]);
+
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-          Create your account
+          Hesap Oluştur
         </h2>
       </div>
 
@@ -76,17 +111,17 @@ const SignupPage = () => {
             {/* Name Field */}
             <div>
               <label htmlFor="name" className="block text-sm font-medium text-gray-700">
-                Name
+                Ad & Soyad
               </label>
               <div className="mt-1">
                 <input
                   id="name"
                   type="text"
                   {...register('name', {
-                    required: 'Name is required',
+                    required: 'Ad Soyad gereklidir',
                     minLength: {
                       value: 3,
-                      message: 'Name must be at least 3 characters'
+                      message: 'Ad Soyad en az 3 karakter olmalıdır'
                     }
                   })}
                   className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-[#23856D] focus:border-[#23856D]"
@@ -100,17 +135,17 @@ const SignupPage = () => {
             {/* Email Field */}
             <div>
               <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-                Email
+                E-posta
               </label>
               <div className="mt-1">
                 <input
                   id="email"
                   type="email"
                   {...register('email', {
-                    required: 'Email is required',
+                    required: 'E-posta gereklidir',
                     pattern: {
                       value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                      message: 'Invalid email address'
+                      message: 'Geçerli bir e-posta adresi giriniz'
                     }
                   })}
                   className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-[#23856D] focus:border-[#23856D]"
@@ -124,21 +159,21 @@ const SignupPage = () => {
             {/* Password Field */}
             <div>
               <label htmlFor="password" className="block text-sm font-medium text-gray-700">
-                Password
+                Şifre
               </label>
               <div className="mt-1">
                 <input
                   id="password"
                   type="password"
                   {...register('password', {
-                    required: 'Password is required',
+                    required: 'Şifre gereklidir',
                     minLength: {
                       value: 8,
-                      message: 'Password must be at least 8 characters'
+                      message: 'Şifre en az 8 karakter olmalıdır'
                     },
                     pattern: {
                       value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
-                      message: 'Password must contain at least one uppercase letter, one lowercase letter, one number and one special character'
+                      message: 'Şifre en az bir büyük harf, bir küçük harf, bir rakam ve bir özel karakter içermelidir'
                     }
                   })}
                   className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-[#23856D] focus:border-[#23856D]"
@@ -152,15 +187,15 @@ const SignupPage = () => {
             {/* Confirm Password Field */}
             <div>
               <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700">
-                Confirm Password
+                Şifre Tekrar
               </label>
               <div className="mt-1">
                 <input
                   id="confirmPassword"
                   type="password"
                   {...register('confirmPassword', {
-                    required: 'Please confirm your password',
-                    validate: value => value === password || 'Passwords do not match'
+                    required: 'Şifrenizi tekrar giriniz',
+                    validate: value => value === password || 'Şifreler eşleşmiyor'
                   })}
                   className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-[#23856D] focus:border-[#23856D]"
                 />
@@ -173,7 +208,7 @@ const SignupPage = () => {
             {/* Role Selection */}
             <div>
               <label htmlFor="role_id" className="block text-sm font-medium text-gray-700">
-                Role
+                Hesap Türü
               </label>
               <div className="mt-1">
                 <select
@@ -183,7 +218,9 @@ const SignupPage = () => {
                 >
                   {roles.map(role => (
                     <option key={role.id} value={role.id}>
-                      {role.name}
+                      {role.name === 'store' ? 'Mağaza' : 
+                       role.name === 'customer' ? 'Müşteri' : 
+                       role.name}
                     </option>
                   ))}
                 </select>
@@ -191,22 +228,24 @@ const SignupPage = () => {
             </div>
 
             {/* Store Fields - Only show if store role is selected */}
-            {selectedRole === '3' && (
-              <>
+            {selectedRole === '2' && (
+              <div className="space-y-6 border-t border-gray-200 pt-6">
+                <h3 className="text-lg font-medium text-gray-900">Mağaza Bilgileri</h3>
+                
                 {/* Store Name */}
                 <div>
                   <label htmlFor="store_name" className="block text-sm font-medium text-gray-700">
-                    Store Name
+                    Mağaza Adı
                   </label>
                   <div className="mt-1">
                     <input
                       id="store_name"
                       type="text"
                       {...register('store_name', {
-                        required: 'Store name is required',
+                        required: 'Mağaza adı gereklidir',
                         minLength: {
                           value: 3,
-                          message: 'Store name must be at least 3 characters'
+                          message: 'Mağaza adı en az 3 karakter olmalıdır'
                         }
                       })}
                       className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-[#23856D] focus:border-[#23856D]"
@@ -220,17 +259,17 @@ const SignupPage = () => {
                 {/* Store Phone */}
                 <div>
                   <label htmlFor="store_phone" className="block text-sm font-medium text-gray-700">
-                    Store Phone
+                    Mağaza Telefonu
                   </label>
                   <div className="mt-1">
                     <input
                       id="store_phone"
                       type="tel"
                       {...register('store_phone', {
-                        required: 'Store phone is required',
+                        required: 'Mağaza telefonu gereklidir',
                         pattern: {
                           value: /^(\+90|0)?[0-9]{10}$/,
-                          message: 'Please enter a valid Turkish phone number'
+                          message: 'Geçerli bir Türkiye telefon numarası giriniz'
                         }
                       })}
                       className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-[#23856D] focus:border-[#23856D]"
@@ -245,17 +284,17 @@ const SignupPage = () => {
                 {/* Tax Number */}
                 <div>
                   <label htmlFor="tax_no" className="block text-sm font-medium text-gray-700">
-                    Tax ID
+                    Vergi Numarası
                   </label>
                   <div className="mt-1">
                     <input
                       id="tax_no"
                       type="text"
                       {...register('tax_no', {
-                        required: 'Tax ID is required',
+                        required: 'Vergi numarası gereklidir',
                         pattern: {
                           value: /^T\d{3}V\d{6}$/,
-                          message: 'Tax ID must match pattern TXXXVXXXXXX'
+                          message: 'Vergi numarası TXXXVXXXXXX formatında olmalıdır'
                         }
                       })}
                       className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-[#23856D] focus:border-[#23856D]"
@@ -277,10 +316,10 @@ const SignupPage = () => {
                       id="bank_account"
                       type="text"
                       {...register('bank_account', {
-                        required: 'IBAN is required',
+                        required: 'IBAN gereklidir',
                         pattern: {
                           value: /^TR\d{2}\d{5}[A-Z0-9]{17}$/,
-                          message: 'Please enter a valid Turkish IBAN'
+                          message: 'Geçerli bir Türkiye IBAN numarası giriniz'
                         }
                       })}
                       className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-[#23856D] focus:border-[#23856D]"
@@ -291,7 +330,7 @@ const SignupPage = () => {
                     )}
                   </div>
                 </div>
-              </>
+              </div>
             )}
 
             <div>
@@ -303,10 +342,10 @@ const SignupPage = () => {
                 {isLoading ? (
                   <>
                     <Loader2 className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" />
-                    Signing up...
+                    Kaydediliyor...
                   </>
                 ) : (
-                  'Sign up'
+                  'Kayıt Ol'
                 )}
               </button>
             </div>
