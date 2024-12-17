@@ -15,6 +15,7 @@ import HomePage from './pages/HomePage.jsx';
 import ContactPage from './pages/ContactPage.jsx';
 import PricingPage from './pages/PricingPage.jsx';
 import ProductPage from './pages/ProductPage.jsx';
+import SignupPage from './pages/SignupPage.jsx';
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
                 <Route path="/contact" component={ContactPage} />
                 <Route path="/pricing" component={PricingPage} />
                 <Route path="/product/:id" component={ProductPage} />
+                <Route path="/signup" component={SignupPage} />
                 <Route path="*">
                   <div className="container mx-auto px-4 py-8">
                     <h1 className="text-3xl font-bold">Page Not Found</h1>
