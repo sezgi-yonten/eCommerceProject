@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'YOUR_API_BASE_URL', // Replace with your API base URL
+  baseURL: 'https://workintech-fe-ecommerce.onrender.com',
   timeout: 10000,
   headers: {
     'Content-Type': 'application/json',
@@ -27,22 +27,20 @@ api.interceptors.request.use(
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    // Handle errors globally
     if (error.response) {
-      // Handle specific error status codes
-      switch (error.response.status) {
-        case 401:
-          // Handle unauthorized
-          break;
-        case 404:
-          // Handle not found
-          break;
-        default:
-          // Handle other errors
-          break;
-      }
+      // The request was made and the server responded with a status code
+      // that falls out of the range of 2xx
+      console.error('Response Error:', error.response.data);
+      return Promise.reject(error.response.data);
+    } else if (error.request) {
+      // The request was made but no response was received
+      console.error('Request Error:', error.request);
+      return Promise.reject({ message: 'No response from server' });
+    } else {
+      // Something happened in setting up the request that triggered an Error
+      console.error('Error:', error.message);
+      return Promise.reject({ message: error.message });
     }
-    return Promise.reject(error);
   }
 );
 
