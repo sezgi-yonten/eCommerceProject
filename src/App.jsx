@@ -4,7 +4,7 @@ import { Provider } from 'react-redux';
 import store from './store/index.js';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import ErrorBoundary from './components/ErrorBoundary.jsx';
+import ErrorBoundary from './components/ErrorBoundary';
 
 // Layout Components
 import Header from './layout/Header.jsx';
@@ -16,6 +16,7 @@ import ContactPage from './pages/ContactPage.jsx';
 import PricingPage from './pages/PricingPage.jsx';
 import ProductPage from './pages/ProductPage.jsx';
 import SignupPage from './pages/SignupPage.jsx';
+import ShopPage from './pages/ShopPage.jsx';
 
 function App() {
   return (
@@ -31,6 +32,7 @@ function App() {
                 <Route path="/pricing" component={PricingPage} />
                 <Route path="/product/:id" component={ProductPage} />
                 <Route path="/signup" component={SignupPage} />
+                <Route path="/shop" component={ShopPage} />
                 <Route path="*">
                   <div className="container mx-auto px-4 py-8">
                     <h1 className="text-3xl font-bold">Page Not Found</h1>
