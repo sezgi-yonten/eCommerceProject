@@ -65,6 +65,81 @@
               "path": ["signup"]
             }
           }
+        },
+        {
+          "name": "Sign Up - Invalid Customer (Missing Fields)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"Jo\",\n    \"email\": \"invalid-email\",\n    \"password\": \"weak\",\n    \"role_id\": \"1\"\n}"
+            },
+            "url": {
+              "raw": "https://workintech-fe-ecommerce.onrender.com/signup",
+              "protocol": "https",
+              "host": ["workintech-fe-ecommerce", "onrender", "com"],
+              "path": ["signup"]
+            }
+          }
+        },
+        {
+          "name": "Sign Up - Invalid Store (Invalid Tax No)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"Store Owner\",\n    \"email\": \"store@example.com\",\n    \"password\": \"Store123!@#\",\n    \"role_id\": \"2\",\n    \"store\": {\n        \"name\": \"My\",\n        \"phone\": \"invalid-phone\",\n        \"tax_no\": \"invalid-tax\",\n        \"bank_account\": \"invalid-iban\"\n    }\n}"
+            },
+            "url": {
+              "raw": "https://workintech-fe-ecommerce.onrender.com/signup",
+              "protocol": "https",
+              "host": ["workintech-fe-ecommerce", "onrender", "com"],
+              "path": ["signup"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Products",
+      "item": [
+        {
+          "name": "Get Products",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "https://workintech-fe-ecommerce.onrender.com/products",
+              "protocol": "https",
+              "host": ["workintech-fe-ecommerce", "onrender", "com"],
+              "path": ["products"]
+            }
+          }
+        },
+        {
+          "name": "Get Product by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "https://workintech-fe-ecommerce.onrender.com/products/1",
+              "protocol": "https",
+              "host": ["workintech-fe-ecommerce", "onrender", "com"],
+              "path": ["products", "1"]
+            }
+          }
         }
       ]
     }
