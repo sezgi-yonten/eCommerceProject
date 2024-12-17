@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ShoppingCart, Search, Menu as MenuIcon, User, Heart, Phone, Mail } from 'lucide-react';
+import { ShoppingCart, Search, Menu as MenuIcon, User, Heart, Phone, Mail, Facebook, Instagram, Twitter, Youtube } from 'lucide-react';
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -28,6 +28,16 @@ const Header = () => {
             <p className="text-sm flex-grow md:flex-grow-0 text-center md:text-left">
               Follow Us and get a chance to win 80% off
             </p>
+            {/* Social Media Links */}
+            <div className="flex items-center space-x-4">
+              <span>Follow Us :</span>
+              <div className="flex space-x-2">
+                <Instagram size={16} />
+                <Youtube size={16} />
+                <Facebook size={16} />
+                <Twitter size={16} />
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -56,10 +66,12 @@ const Header = () => {
             {/* Right Section - fixed width */}
             <div className="flex items-center ml-auto lg:ml-0 space-x-5">
               {/* Login/Register */}
-              <Link to="/login" className="hidden md:flex items-center space-x-2 text-[#23856D] whitespace-nowrap">
-                <User size={20} />
-                <span>Login / Register</span>
-              </Link>
+              <div className="flex items-center text-[#23856D]">
+                <User size={20} className="mr-1" />
+                <Link to="/login" className="mr-1">Login</Link>
+                <span>/</span>
+                <Link to="/signup" className="ml-1">Register</Link>
+              </div>
 
               {/* Icons */}
               <div className="flex items-center space-x-4">
