@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'https://workintech-fe-ecommerce.onrender.com',
+  baseURL: 'https://workintech-fe-ecommerce.onrender.com/api',
   timeout: 10000,
   headers: {
     'Content-Type': 'application/json',
