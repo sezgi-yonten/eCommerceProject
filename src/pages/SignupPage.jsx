@@ -36,14 +36,14 @@ const SignupPage = () => {
     setIsLoading(true);
     try {
       const formData = {
-        name: data.name,
-        email: data.email,
+        name: data.name.trim(),
+        email: data.email.trim().toLowerCase(),
         password: data.password,
-        role_id: data.role_id
+        role_id: parseInt(data.role_id, 10)
       };
 
       // Add store data only if store role is selected
-      if (data.role_id === '2') {
+      if (parseInt(data.role_id, 10) === 2) {
         formData.store = {
           name: data.store_name,
           phone: data.store_phone,
@@ -65,7 +65,7 @@ const SignupPage = () => {
 
   // Register store fields only when store role is selected
   useEffect(() => {
-    if (selectedRole === '2') {
+    if (parseInt(selectedRole, 10) === 2) {
       register('store_name', {
         required: 'Mağaza adı gereklidir',
         minLength: {
@@ -228,7 +228,7 @@ const SignupPage = () => {
             </div>
 
             {/* Store Fields - Only show if store role is selected */}
-            {selectedRole === '2' && (
+            {parseInt(selectedRole, 10) === 2 && (
               <div className="space-y-6 border-t border-gray-200 pt-6">
                 <h3 className="text-lg font-medium text-gray-900">Mağaza Bilgileri</h3>
                 
