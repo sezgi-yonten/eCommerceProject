@@ -59,7 +59,7 @@ const Header = () => {
 
           {/* User Actions */}
           <div className="flex items-center space-x-4">
-            <Link to="/login" className="flex items-center text-[#23856D]">
+            <Link to="/signup" className="flex items-center text-[#23856D]">
               <User className="w-5 h-5 mr-1" />
               <span className="text-sm">Login / Register</span>
             </Link>
